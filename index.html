@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <meta name="description" content="Map a cross-country course, enter a split, and estimate your finish time.">
+  <title>Pacepath — Cross Country Predictor</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="vendor/leaflet.js"></script>
+  <script defer src="app.js"></script>
+</head>
+
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Pacepath home">
+        <span class="brand-mark" aria-hidden="true">↝</span>
+        <span>pacepath<span class="brand-dot">.</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="header-note"><span class="live-dot"></span> Your next PR starts here</span>
+        <span class="avatar" aria-label="Runner profile">R</span>
+      </div>
+    </header>
+
+    <section class="intro">
+      <div class="eyebrow"><span></span> CROSS COUNTRY PREDICTOR</div>
+      <h1>Track the race as it unfolds.</h1>
+      <p>Draw your course, start the race clock, and mark a runner to project their finish.</p>
+    </section>
+
+    <div class="workspace">
+      <section class="course-card" aria-labelledby="course-title">
+        <div class="card-heading">
+          <div>
+            <div class="section-kicker">YOUR COURSE</div>
+            <h2 id="course-title">Course map</h2>
+          </div>
+          <div class="course-actions">
+            <button class="button button-quiet" id="undo-button" type="button" hidden>↶ <span>Undo</span></button>
+            <button class="button button-primary" id="done-button" type="button" hidden disabled>Done</button>
+            <button class="button button-primary" id="draw-button" type="button">＋ <span>Draw course</span></button>
+          </div>
+        </div>
+
+        <div class="map-wrap" id="map-wrap">
+          <form class="map-search" id="search-form" role="search">
+            <label class="visually-hidden" for="map-search">Find a place</label>
+            <input id="map-search" type="search" placeholder="Search a city, park, or address" autocomplete="off"
+              role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="location-suggestions">
+            <button class="search-submit" id="search-submit" type="submit">Search</button>
+            <button class="locate-button" id="locate-button" type="button" aria-label="Find my location"
+              title="Find my location">◎</button>
+          </form>
+          <div class="location-suggestions" id="location-suggestions" hidden></div>
+          <div class="map-instructions"><span class="map-status-dot"></span><span id="map-instructions-text">Search,
+              zoom, or drag to find your course</span></div>
+          <div class="course-map" id="course-map" aria-label="Interactive course map"></div>
+          <div class="map-message" id="map-message" role="status" hidden></div>
+          <div class="map-distance" id="map-distance">⌖ <span>Draw a course to measure</span></div>
+        </div>
+
+        <div class="map-legend" id="map-legend" aria-label="Course segment key">
+          <span class="waypoint-count" id="waypoint-count">0 points</span>
+        </div>
+      </section>
+
+      <aside class="side-column">
+        <section class="input-card">
+          <div class="race-panel-heading">
+            <div>
+              <div class="section-kicker">MEET DAY</div>
+              <h2>Race tracker</h2>
+            </div>
+            <div class="unit-picker">
+              <label class="unit-select-label" for="distance-unit">COLOR PER</label>
+              <select class="unit-select" id="distance-unit">
+                <option value="km">km</option>
+                <option value="mi">mi</option>
+              </select>
+            </div>
+          </div>
+          <div class="course-length-card">
+            <span>COURSE DISTANCE</span>
+            <strong id="course-distance">—</strong>
+            <small id="course-length-note">Draw a route to calculate length</small>
+          </div>
+
+          <div class="timer-block">
+            <div class="timer-caption"><span class="timer-live-dot" id="timer-live-dot"></span> RACE ELAPSED</div>
+            <div class="race-clock" id="race-clock" aria-live="off">--:--</div>
+            <div class="timer-actions">
+              <button class="button button-primary timer-main-button" id="timer-button" type="button" disabled>Start
+                race timer</button>
+              <button class="button button-quiet reset-button" id="reset-button" type="button"
+                aria-label="Reset race timer and runner position" disabled>Reset</button>
+            </div>
+          </div>
+
+          <div class="runner-section">
+            <div class="runner-heading">
+              <div>
+                <div class="field-label">Course position</div>
+                <div class="runner-position" id="runner-position">Not marked yet</div>
+              </div>
+              <span class="position-badge" id="position-badge" hidden>ON COURSE</span>
+            </div>
+            <button class="button button-location" id="track-button" type="button" disabled>⌖ Select position on
+              course</button>
+            <span class="runner-hint">Mark where they are on the course line.</span>
+          </div>
+
+          <div class="estimate-card" aria-live="polite">
+            <div class="estimate-caption">ESTIMATED FINISH</div>
+            <div class="estimate-time" id="estimate-time">--:--</div>
+            <div class="estimate-foot">
+              <span id="estimate-foot-text">Start timer and mark a runner</span>
+              <span class="estimate-arrow">↗</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="pace-note">
+          <span class="note-icon">✳</span>
+          <p><strong>Steady-pace projection</strong><br>The live timer and runner position estimate their finish at
+            today’s average pace.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="page-footer">
+      <span>PACEPATH <span class="footer-dot">·</span> MADE FOR THE LONG WAY</span>
+      <span>Keep showing up.</span>
+    </footer>
+  </main>
+</body>
+
+</html>
