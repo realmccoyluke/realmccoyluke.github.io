@@ -1,0 +1,8 @@
+{
+  "format": "pacepath-public-courses",
+  "version": 1,
+  "courses": [
+    { "file": "test-invitational.json" },
+    { "file": "test2.json" }
+  ]
+}

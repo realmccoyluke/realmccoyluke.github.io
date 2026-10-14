@@ -37,10 +37,32 @@
             <div class="section-kicker">YOUR COURSE</div>
             <h2 id="course-title">Course map</h2>
           </div>
-          <div class="course-actions">
-            <button class="button button-quiet" id="undo-button" type="button" hidden>↶ <span>Undo</span></button>
-            <button class="button button-primary" id="done-button" type="button" hidden disabled>Done</button>
-            <button class="button button-primary" id="draw-button" type="button">＋ <span>Draw course</span></button>
+          <div class="course-tools">
+            <div class="course-actions">
+              <button class="button button-quiet" id="undo-button" type="button" hidden>↶ <span>Undo</span></button>
+              <button class="button button-primary" id="done-button" type="button" hidden disabled>Done</button>
+              <button class="button button-primary" id="draw-button" type="button">＋ <span>Draw course</span></button>
+            </div>
+            <button class="button button-quiet choose-course-button" id="choose-course-button" type="button"
+              aria-expanded="false" aria-controls="course-library">Choose course <span
+                aria-hidden="true">⌄</span></button>
+          </div>
+
+          <div class="course-library" id="course-library" aria-label="Saved courses" hidden>
+            <label class="visually-hidden" for="saved-courses">Choose a course</label>
+            <select id="saved-courses" aria-label="Choose a course">
+              <option value="">Choose a course</option>
+            </select>
+            <label class="visually-hidden" for="course-name-input">Name for the course to save</label>
+            <input id="course-name-input" type="text" maxlength="100" placeholder="Name this course">
+            <button class="button button-quiet" id="save-course-button" type="button" disabled>Save course</button>
+            <button class="button button-quiet" id="upload-course-button" type="button">Upload file</button>
+            <button class="button button-quiet" id="download-courses-button" type="button" disabled>Download
+              Courses</button>
+            <button class="button button-quiet course-remove-button" id="remove-course-button" type="button"
+              disabled>Remove saved course</button>
+            <input id="course-file-input" type="file" accept=".json,application/json" hidden>
+            <span class="course-library-status" id="course-library-status" role="status" aria-live="polite"></span>
           </div>
         </div>
 

@@ -217,6 +217,14 @@ a:focus-visible {
   box-shadow: 0 2px 8px rgb(43 55 39 / 10%);
 }
 
+.course-tools {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
 .section-kicker {
   margin-bottom: 5px;
 }
@@ -233,8 +241,89 @@ a:focus-visible {
 
 .course-actions {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 8px;
+}
+
+.choose-course-button {
+  width: 100%;
+  min-height: 32px;
+  justify-content: space-between;
+}
+
+.choose-course-button[aria-expanded="true"] span {
+  transform: rotate(180deg);
+}
+
+.course-library {
+  position: absolute;
+  z-index: 800;
+  top: calc(100% + 7px);
+  left: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 7px;
+  width: min(410px, calc(100vw - 48px));
+  padding: 10px;
+  border: 1px solid rgb(226 233 219 / 95%);
+  border-radius: 9px;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 2px 8px rgb(43 55 39 / 10%);
+}
+
+.course-library select {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #e3e8e0;
+  border-radius: 6px;
+  color: #536357;
+  background: #fff;
+  font-size: 10px;
+}
+
+.course-library input {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #e3e8e0;
+  border-radius: 6px;
+  color: #536357;
+  background: #fff;
+  font-size: 10px;
+}
+
+.course-library input::placeholder {
+  color: #99a398;
+}
+
+.course-library .button {
+  min-height: 36px;
+  padding: 0 8px;
+}
+
+.course-library .course-remove-button {
+  grid-column: 1 / -1;
+  border-color: #f0dddd;
+  color: #9a4b45;
+}
+
+.course-library .course-remove-button:hover:not(:disabled) {
+  border-color: #e8c8c5;
+  background: #fff6f5;
+}
+
+.course-library-status {
+  grid-column: 1 / -1;
+  min-height: 14px;
+  overflow: hidden;
+  color: #6d8167;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .button {
@@ -847,7 +936,8 @@ a:focus-visible {
   background: #e4eddc;
 }
 
-.estimate-card:fullscreen {
+.estimate-card:fullscreen,
+.estimate-card.is-fullscreen {
   position: relative;
   display: grid;
   width: 100%;
@@ -862,22 +952,43 @@ a:focus-visible {
   text-align: center;
 }
 
-.estimate-card:fullscreen .estimate-time {
+.estimate-card.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  margin: 0;
+}
+
+body.estimate-fullscreen-open {
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+}
+
+.estimate-card:fullscreen .estimate-time,
+.estimate-card.is-fullscreen .estimate-time {
   font-size: clamp(72px, 20vw, 240px);
   letter-spacing: -0.04em;
   line-height: 1;
 }
 
-.estimate-card:fullscreen .estimate-foot {
+.estimate-card:fullscreen .estimate-foot,
+.estimate-card.is-fullscreen .estimate-foot {
   justify-content: center;
   min-height: 28px;
   font-size: 14px;
 }
 
-.estimate-card:fullscreen .estimate-arrow {
+.estimate-card:fullscreen .estimate-arrow,
+.estimate-card.is-fullscreen .estimate-arrow {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: max(20px, env(safe-area-inset-top));
+  right: max(20px, env(safe-area-inset-right));
 }
 
 .pace-note {
@@ -945,11 +1056,11 @@ a:focus-visible {
 
 @media (max-width: 700px) {
   .app-shell {
-    padding: 0 14px;
+    padding: 0 16px;
   }
 
   .topbar {
-    height: 64px;
+    height: 62px;
   }
 
   .header-note {
@@ -957,18 +1068,31 @@ a:focus-visible {
   }
 
   .intro {
-    min-height: 70px;
+    min-height: 0;
     display: block;
-    padding: 14px 0;
+    padding: 18px 0 20px;
   }
 
   .intro .eyebrow {
-    margin-bottom: 5px;
+    margin-bottom: 7px;
   }
 
   .intro h1 {
-    font-size: 20px;
-    letter-spacing: -0.7px;
+    max-width: 340px;
+    font-size: clamp(21px, 6vw, 25px);
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .intro p {
+    display: block;
+    max-width: 330px;
+    margin: 7px 0 0;
+    color: #758078;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
   }
 
   .workspace {
@@ -978,10 +1102,19 @@ a:focus-visible {
 
   .course-card {
     height: auto;
+    padding: 12px;
+    border: 1px solid #e5e9e0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgb(44 61 42 / 5%);
   }
 
   .card-heading {
-    position: static;
+    position: relative;
+    z-index: 650;
+    top: auto;
+    left: auto;
+    align-items: center;
     min-width: 0;
     padding: 0 0 12px;
     border: 0;
@@ -990,21 +1123,99 @@ a:focus-visible {
     box-shadow: none;
   }
 
+  .card-heading h2 {
+    font-size: 18px;
+  }
+
+  .course-tools {
+    width: 136px;
+    flex: 0 0 136px;
+    gap: 6px;
+  }
+
+  .course-actions {
+    display: flex;
+    width: 100%;
+  }
+
+  .course-actions .button,
+  .choose-course-button {
+    width: 100%;
+    min-height: 36px;
+    justify-content: center;
+  }
+
+  .choose-course-button {
+    position: relative;
+  }
+
+  .choose-course-button span {
+    position: absolute;
+    right: 10px;
+  }
+
+  .course-library {
+    right: 0;
+    left: auto;
+  }
+
   .map-wrap {
-    height: clamp(320px, 58svh, 520px);
+    height: clamp(300px, 47svh, 410px);
+    border-radius: 12px;
   }
 
   .side-column {
     position: static;
     width: auto;
     max-height: none;
-    margin-top: 12px;
-    gap: 10px;
+    margin-top: 14px;
+    gap: 12px;
     overflow: visible;
   }
 
   .input-card {
     padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgb(44 61 42 / 5%);
+  }
+
+  .race-panel-heading {
+    margin-bottom: 16px;
+  }
+
+  .input-card h2 {
+    font-size: 19px;
+  }
+
+  .course-length-card {
+    padding: 12px 13px;
+    border-radius: 10px;
+  }
+
+  .timer-block {
+    padding: 15px 13px 13px;
+    margin-top: 12px;
+    border-radius: 11px;
+  }
+
+  .race-clock {
+    margin: 3px 0 10px;
+    font-size: 42px;
+  }
+
+  .timer-main-button,
+  .reset-button {
+    min-height: 42px;
+  }
+
+  .button-location {
+    min-height: 42px;
+    border-radius: 9px;
+  }
+
+  .estimate-card {
+    padding: 14px;
+    border-radius: 11px;
   }
 
   .map-legend {
@@ -1018,16 +1229,28 @@ a:focus-visible {
     border-radius: 0;
     background: transparent;
     box-shadow: none;
+    gap: 12px;
+  }
+
+  .pace-note {
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+
+  .pace-note p {
+    font-size: 10px;
   }
 
   .page-footer {
-    margin-top: 14px;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 14px 0 16px;
   }
 }
 
 @media (max-width: 420px) {
   .app-shell {
-    padding: 0 10px;
+    padding: 0 12px;
   }
 
   .card-heading h2,
@@ -1035,9 +1258,22 @@ a:focus-visible {
     font-size: 17px;
   }
 
+  .course-card {
+    padding: 10px;
+  }
+
+  .card-heading {
+    gap: 8px;
+  }
+
+  .course-tools {
+    width: 128px;
+    flex-basis: 128px;
+  }
+
   .button {
-    min-height: 34px;
-    padding: 0 9px;
+    min-height: 36px;
+    padding: 0 8px;
     font-size: 10px;
   }
 
@@ -1046,7 +1282,9 @@ a:focus-visible {
   }
 
   .map-instructions {
-    top: 58px;
+    bottom: 48px;
+    max-width: calc(100% - 24px);
+    font-size: 9px;
   }
 
   .map-legend {
@@ -1060,5 +1298,28 @@ a:focus-visible {
 
   .page-footer {
     font-size: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .course-tools {
+    width: 100%;
+    flex-basis: auto;
+    flex-direction: row;
+  }
+
+  .course-actions,
+  .choose-course-button {
+    flex: 1;
+  }
+
+  .course-actions .button,
+  .choose-course-button {
+    min-height: 38px;
   }
 }
