@@ -28,8 +28,11 @@
     runnerPosition: document.getElementById('runner-position'),
     positionBadge: document.getElementById('position-badge'),
     trackButton: document.getElementById('track-button'),
+    estimateCard: document.getElementById('estimate-card'),
     estimateTime: document.getElementById('estimate-time'),
     estimateFoot: document.getElementById('estimate-foot-text'),
+    estimateFullscreenButton: document.getElementById('estimate-fullscreen-button'),
+    estimateFullscreenStatus: document.getElementById('estimate-fullscreen-status'),
     searchForm: document.getElementById('search-form'),
     searchInput: document.getElementById('map-search'),
     searchSubmit: document.getElementById('search-submit'),
@@ -449,6 +452,33 @@
     state.mapMessage = ''
     state.mode = state.mode === 'track' ? null : 'track'
     render()
+  })
+  elements.estimateFullscreenButton.addEventListener('click', async () => {
+    elements.estimateFullscreenStatus.textContent = ''
+    try {
+      if (document.fullscreenElement === elements.estimateCard) {
+        await document.exitFullscreen()
+      } else if (typeof elements.estimateCard.requestFullscreen === 'function' &&
+        document.fullscreenEnabled !== false) {
+        await elements.estimateCard.requestFullscreen()
+      } else {
+        elements.estimateFullscreenStatus.textContent = 'Fullscreen is not available in this browser.'
+        return
+      }
+    } catch (error) {
+      console.error('Unable to display the estimated finish time in fullscreen.', error)
+      elements.estimateFullscreenStatus.textContent =
+        'Could not enter fullscreen. Check your browser settings.'
+    }
+  })
+  document.addEventListener('fullscreenchange', () => {
+    const isFullscreen = document.fullscreenElement === elements.estimateCard
+    elements.estimateFullscreenButton.textContent = isFullscreen ? '↙' : '↗'
+    const label = isFullscreen
+      ? 'Exit fullscreen estimated finish time'
+      : 'Show estimated finish time in fullscreen'
+    elements.estimateFullscreenButton.setAttribute('aria-label', label)
+    elements.estimateFullscreenButton.title = label
   })
   elements.searchForm.addEventListener('submit', (event) => {
     event.preventDefault()

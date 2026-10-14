@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#f6f7f2">
   <meta name="description" content="Map a cross-country course, enter a split, and estimate your finish time.">
   <title>Pacepath — Cross Country Predictor</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.png" type="image/png">
   <link rel="stylesheet" href="vendor/leaflet.css">
   <link rel="stylesheet" href="styles.css">
   <script defer src="vendor/leaflet.js"></script>
@@ -21,16 +21,13 @@
         <span class="brand-mark" aria-hidden="true">↝</span>
         <span>pacepath<span class="brand-dot">.</span></span>
       </a>
-      <div class="topbar-right">
-        <span class="header-note"><span class="live-dot"></span> Your next PR starts here</span>
-        <span class="avatar" aria-label="Runner profile">R</span>
-      </div>
+
     </header>
 
     <section class="intro">
       <div class="eyebrow"><span></span> CROSS COUNTRY PREDICTOR</div>
       <h1>Track the race as it unfolds.</h1>
-      <p>Draw your course, start the race clock, and mark a runner to project their finish.</p>
+      <p>Draw your course, start the race clock, and mark a position to project finishing time.</p>
     </section>
 
     <div class="workspace">
@@ -111,17 +108,20 @@
             </div>
             <button class="button button-location" id="track-button" type="button" disabled>⌖ Select position on
               course</button>
-            <span class="runner-hint">Mark where they are on the course line.</span>
+            <span class="runner-hint">Mark where you are on the course.</span>
           </div>
 
-          <div class="estimate-card" aria-live="polite">
+          <div class="estimate-card" id="estimate-card" aria-live="polite">
             <div class="estimate-caption">ESTIMATED FINISH</div>
             <div class="estimate-time" id="estimate-time">--:--</div>
             <div class="estimate-foot">
               <span id="estimate-foot-text">Start timer and mark a runner</span>
-              <span class="estimate-arrow">↗</span>
+              <button class="estimate-arrow" id="estimate-fullscreen-button" type="button"
+                aria-label="Show estimated finish time in fullscreen"
+                title="Show estimated finish time in fullscreen">↗</button>
             </div>
           </div>
+          <span class="visually-hidden" id="estimate-fullscreen-status" role="status"></span>
         </section>
 
         <div class="pace-note">
